@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require('fs');
-var packer = require('packer');
+var packer = require('./packer');
 var args = require('nomnom').opts({
     input_file: {
         abbr: 'i',
@@ -19,13 +19,17 @@ var args = require('nomnom').opts({
     shrink: {
 		abbr: 's',
 		help: 'Shrink variables'
+	},
+	phrase: {
+		abbr: 'p',
+		help: 'Variables phrase (6 different letters)'
 	}
 }).parseArgs();
 
 var data = '';
 
 function finish() {
-	var packed_data = packer.pack(data, args.base62, args.shrink) + '\n';
+	var packed_data = packer.pack(data, args.base62, args.shrink, args.phrase) + '\n';
 	if (args.output_file) {
 		fs.writeFile(args.output_file, packed_data, function(error) {
 			if (error) {

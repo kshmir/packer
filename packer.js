@@ -89,18 +89,20 @@ var Packer = Base.extend({
 		return script;
 	},
 	
-	pack: function(script, base62, shrink) {
+	pack: function(script, base62, shrink, phrase) {
 		script = this.minify(script + "\n");
 		if (shrink) script = this._shrinkVariables(script);
-		if (base62) script = this._base62Encode(script);	
+		if (base62) script = this._base62Encode(script, phrase);
 		return script;
 	},
 	
-	_base62Encode: function(script) {
+	_base62Encode: function(script, phrase) {
 		var words = new Words(script);
 		var encode = function(word) {
 			return words.get(word).encoded;
 		};
+
+		phrase = ((phrase && phrase.length === 6) ? phrase: 'packer').split('');
 		
 		/* build the packed script */
 		
@@ -109,10 +111,11 @@ var Packer = Base.extend({
 		var c = words.size();
 		var k = words;
 		var e = Packer["ENCODE" + (a > 10 ? a > 36 ? 62 : 36 : 10)];
-		var r = a > 10 ? "e(c)" : "c";
-		
+		//var r = a > 10 ? "e(c)" : "c";
+		var r = a > 10 ? (phrase[4] + '(' + phrase[2] + ')') : phrase[2];
+
 		// the whole thing
-		return format(Packer.UNPACK, p,a,c,k,e,r);
+		return format(Packer.UNPACK(phrase), p,a,c,k,e,r);
 	},
 	
 	_escape: function(script) {
@@ -228,10 +231,21 @@ var Packer = Base.extend({
 	ENCODE10: "String",
 	ENCODE36: "function(c){return c.toString(a)}",
 	ENCODE62: "function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))}",
-	
-	UNPACK: "eval(function(p,a,c,k,e,r){e=%5;if(!''.replace(/^/,String)){while(c--)r[%6]=k[c]" +
-	        "||%6;k=[function(e){return r[e]}];e=function(){return'\\\\w+'};c=1};while(c--)if(k[c])p=p." +
-			"replace(new RegExp('\\\\b'+e(c)+'\\\\b','g'),k[c]);return p}('%1',%2,%3,'%4'.split('|'),0,{}))",
+
+    /**
+     * @return {string}
+     * p 0
+     * a 1
+     * c 2
+     * k 3
+     * e 4
+     * r 5
+     */
+    UNPACK: function(phrase){
+        return "eval(function("+phrase.join(',')+"){"+phrase[4]+"=%5;if(!''.replace(/^/,String)){while("+phrase[2]+"--)"+phrase[5]+"[%6]="+phrase[3]+"["+phrase[2]+"]" +
+	        "||%6;"+phrase[3]+"=[function("+phrase[4]+"){return "+phrase[5]+"["+phrase[4]+"]}];"+phrase[4]+"=function(){return'\\\\w+'};"+phrase[2]+"=1};while("+phrase[2]+"--)if("+phrase[3]+"["+phrase[2]+"])"+phrase[0]+"="+phrase[0]+"." +
+			"replace(new RegExp('\\\\b'+"+phrase[4]+"("+phrase[2]+")+'\\\\b','g'),"+phrase[3]+"["+phrase[2]+"]);return "+phrase[0]+"}('%1',%2,%3,'%4'.split('|'),0,{}))";
+	},
 	
 	init: function() {
 		this.data = reduce(this.data, function(data, replacement, expression) {
