@@ -30,6 +30,7 @@ It also adds the `packer` command:
     -o FILE	Output file (default stdout)
     -b	Base62 encode
     -s	Shrink variables
+    -p  Variables phrase (6 different letters)
 
     $ echo 1 + a | packer -b
     eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('1+0',2,2,'a|'.split('|'),0,{}))
