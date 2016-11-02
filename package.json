@@ -1,7 +1,7 @@
 {
 	"name": "packer",
 	"description": "Simple port of /packer/ by Dean Edwards",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"repository": "https://github.com/evanw/packer",
 	"author": "Evan Wallace",
 	"main": "packer",
@@ -15,5 +15,6 @@
 	},
 	"engines": {
 	    "node": ">= 6.6.0"
-	}
+	},
+	"license" : "MIT"
 }
