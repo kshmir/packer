@@ -25,7 +25,7 @@ var Words = Collection.extend({
 			return word2.count - word1.count;
 		});
 		
-		eval("var "+phrase[1]+"=62,"+phrase[4]+"=" + Packer.ENCODE62(phrase));
+		eval("var a=62,e=" + Packer.ENCODE62(phrase));
 		var encode = e;		
 		var encoded = new Collection; // a dictionary of base62 -> base10
 		var count = this.size();
