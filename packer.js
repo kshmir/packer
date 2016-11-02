@@ -122,7 +122,7 @@ var Packer = Base.extend({
 		var a = Math.min(Math.max(words.size(), 2), 62);
 		var c = words.size();
 		var k = words;
-		var e = Packer["ENCODE" + (a > 10 ? a > 36 ? 62 : 36 : 10)];
+		var e = Packer["ENCODE" + (a > 10 ? a > 36 ? 62 : 36 : 10)](phrase);
 		//var r = a > 10 ? "e(c)" : "c";
 		var r = a > 10 ? (phrase[4] + '(' + phrase[2] + ')') : phrase[2];
 
@@ -241,7 +241,12 @@ var Packer = Base.extend({
 	CONTINUE: /\\\r?\n/g,
 	
 	ENCODE10: "String",
-	ENCODE36: "function(c){return c.toString(a)}",
+    /**
+     * @return {string}
+     */
+	ENCODE36: function(phrase){
+        return "function("+phrase[2]+"){return "+phrase[2]+".toString("+phrase[1]+")}";
+	},
     /**
      * @return {string}
      */
