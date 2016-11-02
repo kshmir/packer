@@ -102,7 +102,19 @@ var Packer = Base.extend({
 			return words.get(word).encoded;
 		};
 
-		phrase = ((phrase && phrase.length === 6) ? phrase: 'packer').split('');
+        // check if given array has all unique values
+		var isUniq = function(arr) {
+            return !!arr.reduce(function (dict, item) {
+                if (!dict || dict[item]) {
+                    return false;
+                } else {
+                    dict[item] = true;
+                    return dict;
+                }
+            }, {});
+        };
+
+		phrase = ((phrase && phrase.length === 6 && !/[^a-z]/i.test(phrase) && isUniq(phrase.split(''))) ? phrase: 'packer').split('');
 		
 		/* build the packed script */
 		
