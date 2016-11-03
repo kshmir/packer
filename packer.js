@@ -114,7 +114,7 @@ var Packer = Base.extend({
             }, {});
         };
 
-		phrase = ((phrase && phrase.length === 6 && !/[^a-z]/i.test(phrase) && isUniq(phrase.split(''))) ? phrase: 'packer').split('');
+		phrase = ((phrase && phrase.length >= 6 && !/[^a-z]/i.test(phrase) && isUniq(phrase.split(''))) ? phrase: 'packer').split('');
 
 		/* build the packed script */
 		
