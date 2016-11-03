@@ -115,7 +115,7 @@ var Packer = Base.extend({
         };
 
 		phrase = ((phrase && phrase.length === 6 && !/[^a-z]/i.test(phrase) && isUniq(phrase.split(''))) ? phrase: 'packer').split('');
-		
+
 		/* build the packed script */
 		
 		var p = this._escape(script.replace(WORDS, encode));		
@@ -239,8 +239,11 @@ var Packer = Base.extend({
 	}
 }, {
 	CONTINUE: /\\\r?\n/g,
-	
-	ENCODE10: "String",
+
+    /**
+     * @return {string}
+     */
+	ENCODE10: function(){ return "String"; },
     /**
      * @return {string}
      */
