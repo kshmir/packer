@@ -90,6 +90,18 @@ var Packer = Base.extend({
 	},
 	
 	pack: function(script, base62, shrink, phrase) {
+        // check if given array has all unique values
+        var isUniq = function(arr) {
+            return !!arr.reduce(function (dict, item) {
+                if (!dict || dict[item]) {
+                    return false;
+                } else {
+                    dict[item] = true;
+                    return dict;
+                }
+            }, {});
+        };
+        phrase = ((phrase && phrase.length >= 6 && !/[^a-z]/i.test(phrase) && isUniq(phrase.split(''))) ? phrase: 'packer').split('');
 		script = this.minify(script + "\n");
 		if (shrink) script = this._shrinkVariables(script);
 		if (base62) script = this._base62Encode(script, phrase);
@@ -101,20 +113,6 @@ var Packer = Base.extend({
 		var encode = function(word) {
 			return words.get(word).encoded;
 		};
-
-        // check if given array has all unique values
-		var isUniq = function(arr) {
-            return !!arr.reduce(function (dict, item) {
-                if (!dict || dict[item]) {
-                    return false;
-                } else {
-                    dict[item] = true;
-                    return dict;
-                }
-            }, {});
-        };
-
-		phrase = ((phrase && phrase.length >= 6 && !/[^a-z]/i.test(phrase) && isUniq(phrase.split(''))) ? phrase: 'packer').split('');
 
 		/* build the packed script */
 		
