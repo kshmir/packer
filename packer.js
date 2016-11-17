@@ -29,8 +29,8 @@ var Words = Collection.extend({
 		var encode = eval(phrase[4]);
 		var encoded = new Collection; // a dictionary of base62 -> base10
 		var count = this.size();
-		for (var i = 0; i < count; i++) {
-			encoded.put(encode(i), i);
+		for (var ii = 0; ii < count; ii++) {
+			encoded.put(encode(ii), ii);
 		}
 		
 		var empty = function() {return ""};
